@@ -11,7 +11,7 @@ export class TodoRouter {
     const todoMemoryRepository = new TodoMemoryRepository();
     const todoPrismaRepository = new TodoPrismaPostgresRepository();
     // const todoService = new TodoService(todoMemoryRepository);
-    const todoService = new TodoService(todoPrismaRepository);
+    const todoService = new TodoService(todoMemoryRepository);
     const todoController = new TodoController(todoService);
 
     router.get("/", todoController.getAll);

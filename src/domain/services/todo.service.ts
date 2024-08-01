@@ -19,11 +19,15 @@ export class TodoService implements TodoServiceInterface {
     return this.todoRepository.create(createTodoDto);
   }
 
-  update(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
+  async update(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
+    await this.todoRepository.getById(updateTodoDto.id);
+
     return this.todoRepository.update(updateTodoDto);
   }
 
-  delete(id: number): Promise<TodoEntity> {
+  async delete(id: number): Promise<TodoEntity> {
+    await this.todoRepository.getById(id);
+
     return this.todoRepository.delete(id);
   }
 }

@@ -33,14 +33,16 @@ export default class TodoMemoryRepository implements TodoRepositoryInterface {
   }
 
   async update(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
-    const foundTodo = await this.getById(updateTodoDto.id);
+    const { id } = updateTodoDto;
+
+    const foundTodoIndex = TODOS.findIndex((todo) => todo.id === id);
+
+    const todoToUpdate = TODOS[foundTodoIndex];
 
     const updatedTodo = {
-      ...foundTodo,
+      ...todoToUpdate,
       ...updateTodoDto.values,
     };
-
-    const foundTodoIndex = TODOS.findIndex((todo) => todo.id === foundTodo.id);
 
     TODOS.splice(foundTodoIndex, 1, updatedTodo);
 
@@ -48,12 +50,10 @@ export default class TodoMemoryRepository implements TodoRepositoryInterface {
   }
 
   async delete(id: number): Promise<TodoEntity> {
-    const foundTodo = await this.getById(id);
+    const foundTodoIndex = TODOS.findIndex((todo) => todo.id === id);
 
-    const foundTodoIndex = TODOS.findIndex((todo) => todo.id === foundTodo.id);
+    const [deletedTodo] = TODOS.splice(foundTodoIndex, 1);
 
-    TODOS.splice(foundTodoIndex, 1);
-
-    return TodoEntity.fromObject(foundTodo);
+    return TodoEntity.fromObject(deletedTodo);
   }
 }

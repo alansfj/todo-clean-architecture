@@ -37,11 +37,11 @@ export class TodoPrismaPostgresRepository implements TodoRepositoryInterface {
   }
 
   async update(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
-    await this.getById(updateTodoDto.id);
+    const { id } = updateTodoDto;
 
     const updatedTodo = await prisma.todo.update({
       where: {
-        id: updateTodoDto.id,
+        id,
       },
       data: {
         ...updateTodoDto.values,
@@ -52,8 +52,6 @@ export class TodoPrismaPostgresRepository implements TodoRepositoryInterface {
   }
 
   async delete(id: number): Promise<TodoEntity> {
-    await this.getById(id);
-
     const deletedTodo = await prisma.todo.delete({
       where: {
         id,
