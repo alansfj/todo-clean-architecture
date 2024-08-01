@@ -12,7 +12,7 @@ export class UpdateTodoDto {
 
     if (isNaN(id)) return ["id property must be a number"];
 
-    if (!text && !isCompleted)
+    if (!text && isCompleted === undefined)
       return ["text or isCompleted properties are required"];
 
     if (text) {
@@ -31,7 +31,7 @@ export class UpdateTodoDto {
     const object: { [key: string]: any } = {};
 
     if (this.text) object.text = this.text;
-    if (this.isCompleted) object.isCompleted = this.isCompleted;
+    if (this.isCompleted !== undefined) object.isCompleted = this.isCompleted;
 
     return object;
   }
