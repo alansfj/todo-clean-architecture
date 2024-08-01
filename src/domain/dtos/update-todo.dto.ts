@@ -1,3 +1,5 @@
+import { CustomError } from "../errors/custom-error";
+
 export class UpdateTodoDto {
   private constructor(
     public readonly id: number,
@@ -5,23 +7,31 @@ export class UpdateTodoDto {
     public readonly isCompleted?: boolean
   ) {}
 
-  static create(object: { [key: string]: any }): [string?, UpdateTodoDto?] {
+  static create(object: {
+    [key: string]: any;
+  }): [CustomError?, UpdateTodoDto?] {
     const { id, text, isCompleted } = object;
 
-    if (!id) return ["id property is required"];
+    if (isNaN(id))
+      return [CustomError.badRequest("id property must be a number")];
 
-    if (isNaN(id)) return ["id property must be a number"];
+    if (!id) return [CustomError.badRequest("id property is required")];
 
-    if (!text && isCompleted === undefined)
-      return ["text or isCompleted properties are required"];
+    if (text === undefined && isCompleted === undefined)
+      return [
+        CustomError.badRequest("text or isCompleted properties are required"),
+      ];
 
-    if (text) {
-      if (typeof text !== "string") return ["text property must be a string"];
+    if (text !== undefined) {
+      if (typeof text !== "string")
+        return [CustomError.badRequest("text property must be a string")];
     }
 
     if (isCompleted !== undefined) {
       if (typeof isCompleted !== "boolean")
-        return ["isCompleted property must be a boolean"];
+        return [
+          CustomError.badRequest("isCompleted property must be a boolean"),
+        ];
     }
 
     return [undefined, new UpdateTodoDto(id, text, isCompleted)];
